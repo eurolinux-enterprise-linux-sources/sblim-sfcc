@@ -1,5 +1,5 @@
 #
-# $Id: sfcc.spec.in,v 1.2 2007/02/27 14:07:00 mihajlov Exp $
+# $Id$
 #
 # Package spec for sblim-sfcc
 #
@@ -10,11 +10,13 @@ BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXXX)
 Summary: Small Footprint CIM Client Library
 Name: sblim-sfcc
 Version: 2.2.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: Applications/System
 License: EPL
 URL: http://www.sblim.org
 Source0: http://downloads.sourceforge.net/project/sblim/%{name}/%{version}/%{name}-%{version}.tar.bz2
+# Patch0: rhbz#875011, backported from upstream
+Patch0: sblim-sfcc-2.2.2-support-type-attr-for-keyvalue.patch
 BuildRequires: curl-devel
 
 %Description
@@ -32,6 +34,7 @@ Small Footprint CIM Client Library Header Files and Link Libraries
 %prep
 
 %setup -q
+%patch0 -p0 -b .support-type-attr-for-keyvalue
 
 %build
 chmod a-x backend/cimxml/*.[ch]
@@ -69,6 +72,10 @@ rm -rf %{buildroot}
 %{_libdir}/*.so 
 
 %changelog
+* Tue Aug 13 2013 Vitezslav Crhonek <vcrhonek@redhat.com> - 2.2.2-2
+- Fix sfcc enumInstances fails to parse the XML
+  Resolves: #875011
+
 * Tue Jul 19 2011 Vitezslav Crhonek <vcrhonek@redhat.com> - 2.2.2-1
 - Update to sblim-sfcc-2.2.2
   Resolves: #715331

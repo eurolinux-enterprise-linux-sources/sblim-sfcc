@@ -1,0 +1,17 @@
+diff -a -u -p -U4 -r1.6 cimXmlParser.c
+--- backend/cimxml/cimXmlParser.c	26 Mar 2008 18:56:51 -0000	1.6
++++ backend/cimxml/cimXmlParser.c	14 Sep 2012 01:17:26 -0000
+@@ -755,11 +755,12 @@ static int procClass(parseUnion * lvalp,
+ static int procKeyValue(parseUnion * lvalp, ParserControl * parm)
+ {
+    static XmlElement elm[] = {
+       {"VALUETYPE"},
++      {"TYPE"},
+       {NULL}
+    };
+-   XmlAttr attr[1] = {
++   XmlAttr attr[2] = {
+       {NULL}
+    };
+    char *val;
+ 
