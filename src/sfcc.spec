@@ -8,7 +8,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 Summary: Small Footprint CIM Client Library
 Name: sblim-sfcc
-Version: 2.2.1
+Version: 2.2.2
 Release: 0
 Group: Systems Management/Base
 License: EPL

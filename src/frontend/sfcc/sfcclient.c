@@ -109,6 +109,15 @@ CMCIClient *cmciConnect2(const char *hn, const char *scheme, const char *port,
     }
   }
   pthread_mutex_unlock(&ConnectionControl.ccMux);
+  if (!cc) {
+    /* cleanup ccEnv after pthread_mutex_unlock */
+    cmciRelease(NULL);
+    if (rc) {
+      rc->rc = CMPI_RC_ERR_FAILED;
+      rc->msg = NULL;
+    }
+  }
+
   return cc;
 }
 
@@ -236,11 +245,15 @@ char * value2Chars (CMPIType type, CMPIValue *value)
       case CMPI_filter:
          break;
 
+      case CMPI_chars:
+        return strdup(value->chars ? (char*)value->chars : "NULL");
+        break;
+
       case CMPI_string:
       case CMPI_numericString:
       case CMPI_booleanString:
       case CMPI_dateTimeString:
-      case CMPI_classNameString:
+      //case CMPI_classNameString: /* Deprecated SF# 2967257 */
          return strdup((value->string && value->string->hdl) ?
              (char*)value->string->hdl : "NULL");
 

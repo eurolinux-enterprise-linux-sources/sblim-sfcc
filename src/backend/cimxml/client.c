@@ -27,6 +27,7 @@
 
 #include <time.h>              // new
 #include <sys/time.h>          // new
+#include <sys/un.h>            // new
 
 #include "config.h"
 
@@ -269,6 +270,27 @@ static size_t writeHeaders(void *ptr, size_t size,
 }
 
 
+#if LIBCURL_VERSION_NUM >= 0x071101
+static curl_socket_t opensockCb(void *clientp, 
+		curlsocktype purpose, 
+		struct curl_sockaddr *caddr)
+{
+   const char* path = (const char*)clientp;
+   struct sockaddr_un* unaddr = (struct sockaddr_un*)&caddr->addr;
+   caddr->family = AF_UNIX; 
+   caddr->addrlen = sizeof(struct sockaddr_un);
+   /* This is actually safe.  caddr is padded.  See singleipconnect()
+    * in lib/connect.c within libcurl for details */ 
+   memset(unaddr, 0, caddr->addrlen);
+   unaddr->sun_family = AF_UNIX;
+   strncpy(unaddr->sun_path, path, sizeof(unaddr->sun_path));
+   caddr->protocol = 0; 
+   return socket(caddr->family, caddr->socktype, caddr->protocol);
+}
+#endif
+
+/* --------------------------------------------------------------------------*/
+
 static size_t writeCb(void *ptr, size_t size,
 					size_t nmemb, void *stream)
 {
@@ -376,8 +398,19 @@ static char* genRequest(ClientEnc *cle, const char *op,
    con->mResponse->ft->reset(con->mResponse);
 
    con->mUri->ft->reset(con->mUri);
-   con->mUri->ft->append6Chars(con->mUri, cld->scheme, "://", cld->hostName,
-						  ":", cld->port, "/cimom");
+
+#if LIBCURL_VERSION_NUM >= 0x071101
+   if (cld->port != NULL && cld->port[0] == '/') {
+   // Setup connection to Unix Socket
+      con->mUri->ft->append3Chars(con->mUri, cld->scheme, "://", cld->hostName);
+      con->mUri->ft->appendChars(con->mUri, "/cimom"); 
+      curl_easy_setopt(con->mHandle, CURLOPT_OPENSOCKETDATA, cld->port);
+      curl_easy_setopt(con->mHandle, CURLOPT_OPENSOCKETFUNCTION, opensockCb);
+   }
+   else 
+#endif
+      con->mUri->ft->append6Chars(con->mUri, cld->scheme, "://", 
+			  cld->hostName, ":", cld->port, "/cimom");
 
    /* Initialize curl with the url */
    curl_easy_setopt(con->mHandle, CURLOPT_URL,
@@ -1662,6 +1695,7 @@ static CMPIEnumeration * enumInstances(
     if (error || (error = con->ft->getResponse(con, cop))) {
         CMSetStatusWithChars(rc,CMPI_RC_ERR_FAILED,error);
         free(error);
+        CMRelease(sb);
         END_TIMING(_T_FAILED);
         return NULL;
     }
@@ -2246,7 +2280,7 @@ CMPIData invokeMethod(
          case CMPI_instance:	/* TODO: UNTESTED */
              sb->ft->append3Chars(sb, "<PARAMVALUE NAME=\"",
                                       argname->hdl,
-                                      "\" PARAMTYPE=\"instance\">\n");
+                                      "\">\n");
 	     if (argdata.type & CMPI_ARRAY) {
 	       int i;
 	       int n = CMGetArrayCount(argdata.value.array, NULL);
@@ -2254,11 +2288,15 @@ CMPIData invokeMethod(
 	       for (i=0; i < n; i++) {
 		 CMPIData instel = 
 		   CMGetArrayElementAt(argdata.value.array,i,NULL);
-		 addXmlNamedInstance(sb, NULL, instel.value.inst);
+		 sb->ft->appendChars(sb, "<VALUE>\n<![CDATA[\n");
+		 addXmlInstance(sb, NULL, instel.value.inst);
+		 sb->ft->appendChars(sb, "]]>\n</VALUE>\n");
 	       }
 	       sb->ft->appendChars(sb, "</VALUE.ARRAY>\n");	       
 	     } else {
-	       addXmlNamedInstance(sb, NULL, argdata.value.inst);
+	       sb->ft->appendChars(sb, "<VALUE>\n<![CDATA[\n");
+	       addXmlInstance(sb, NULL, argdata.value.inst);
+	       sb->ft->appendChars(sb, "]]>\n</VALUE>\n");
 	     }
 	     sb->ft->appendChars(sb,"</PARAMVALUE>\n");
              break;
@@ -2269,13 +2307,13 @@ CMPIData invokeMethod(
 	     if (argdata.type & CMPI_ARRAY) {
 	       int i;
 	       int n = CMGetArrayCount(argdata.value.array, NULL);
-	       sb->ft->appendChars(sb, "<VALUE.ARRAY>\n");	       
+	       sb->ft->appendChars(sb, "<VALUE.REFARRAY>\n");	       
 	       for (i=0; i < n; i++) {
 		 CMPIData refel = 
 		   CMGetArrayElementAt(argdata.value.array,i,NULL);
 		 addXmlReference(sb,refel.value.ref);
 	       }
-	       sb->ft->appendChars(sb, "</VALUE.ARRAY>\n");	       
+	       sb->ft->appendChars(sb, "</VALUE.REFARRAY>\n");	       
 	     } else {
 	       addXmlReference(sb,argdata.value.ref);
 	     }

@@ -46,7 +46,8 @@ noinst_PROGRAMS = test$(EXEEXT) test_an$(EXEEXT) test_an_2$(EXEEXT) \
 	test_sp$(EXEEXT) test_xq$(EXEEXT) test_cpp$(EXEEXT) \
 	test_qualifiers$(EXEEXT) test_qualifiers2$(EXEEXT) \
 	v2test_ec$(EXEEXT) v2test_ecn$(EXEEXT) v2test_ei$(EXEEXT) \
-	v2test_ein$(EXEEXT) v2test_gc$(EXEEXT) print-types$(EXEEXT)
+	v2test_ein$(EXEEXT) v2test_gc$(EXEEXT) v2test_im$(EXEEXT) \
+	print-types$(EXEEXT)
 subdir = TEST
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -170,6 +171,9 @@ v2test_ein_DEPENDENCIES = ../libcmpisfcc.la
 am_v2test_gc_OBJECTS = v2test_gc.$(OBJEXT) show.$(OBJEXT)
 v2test_gc_OBJECTS = $(am_v2test_gc_OBJECTS)
 v2test_gc_DEPENDENCIES = ../libcmpisfcc.la
+am_v2test_im_OBJECTS = v2test_im.$(OBJEXT) show.$(OBJEXT)
+v2test_im_OBJECTS = $(am_v2test_im_OBJECTS)
+v2test_im_DEPENDENCIES = ../libcmpisfcc.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -204,7 +208,7 @@ SOURCES = $(print_types_SOURCES) $(test_SOURCES) $(test_an_SOURCES) \
 	$(test_rfn_SOURCES) $(test_si_SOURCES) $(test_sp_SOURCES) \
 	$(test_xq_SOURCES) $(v2test_ec_SOURCES) $(v2test_ecn_SOURCES) \
 	$(v2test_ei_SOURCES) $(v2test_ein_SOURCES) \
-	$(v2test_gc_SOURCES)
+	$(v2test_gc_SOURCES) $(v2test_im_SOURCES)
 DIST_SOURCES = $(print_types_SOURCES) $(test_SOURCES) \
 	$(test_an_SOURCES) $(test_an_2_SOURCES) $(test_as_SOURCES) \
 	$(test_as_2_SOURCES) $(test_ci_SOURCES) $(test_cpp_SOURCES) \
@@ -218,7 +222,7 @@ DIST_SOURCES = $(print_types_SOURCES) $(test_SOURCES) \
 	$(test_rfn_SOURCES) $(test_si_SOURCES) $(test_sp_SOURCES) \
 	$(test_xq_SOURCES) $(v2test_ec_SOURCES) $(v2test_ecn_SOURCES) \
 	$(v2test_ei_SOURCES) $(v2test_ein_SOURCES) \
-	$(v2test_gc_SOURCES)
+	$(v2test_gc_SOURCES) $(v2test_im_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -476,6 +480,8 @@ v2test_ein_SOURCES = v2test_ein.c show.c
 v2test_ein_LDADD = ../libcmpisfcc.la
 v2test_gc_SOURCES = v2test_gc.c show.c
 v2test_gc_LDADD = ../libcmpisfcc.la
+v2test_im_SOURCES = v2test_im.c show.c
+v2test_im_LDADD = ../libcmpisfcc.la
 print_types_SOURCES = print-types.c
 all: all-am
 
@@ -632,6 +638,9 @@ v2test_ein$(EXEEXT): $(v2test_ein_OBJECTS) $(v2test_ein_DEPENDENCIES)
 v2test_gc$(EXEEXT): $(v2test_gc_OBJECTS) $(v2test_gc_DEPENDENCIES) 
 	@rm -f v2test_gc$(EXEEXT)
 	$(LINK) $(v2test_gc_OBJECTS) $(v2test_gc_LDADD) $(LIBS)
+v2test_im$(EXEEXT): $(v2test_im_OBJECTS) $(v2test_im_DEPENDENCIES) 
+	@rm -f v2test_im$(EXEEXT)
+	$(LINK) $(v2test_im_OBJECTS) $(v2test_im_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -676,6 +685,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v2test_ei.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v2test_ein.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v2test_gc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/v2test_im.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

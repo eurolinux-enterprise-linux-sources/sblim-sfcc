@@ -1,5 +1,24 @@
 Small Footprint CIM Client Library NEWS
 
+Changes in 2.2.2
+================
+
+Bugs:
+- 2982349: Memory leak in backend/cimxml/client.c
+- 2982352: Double free in backend/cimxml/property.c
+- 3043288: XML generated with VALUE.ARRAY for ref arrays
+- 3043282: XML gen for embedded instances for invokeMethod is incorrect
+- 3059060: 'struct _CIMCArgsFT' not defined in cimc/cimcft.h
+- 2348900: Concurrency issue when parsing responses
+- 2793377: Missing includes
+- 3101151: SfcbLocal failed to connect due to hardcoded library path
+- 3195267: sfcc v2 tests segfault when sfcb is not running
+- 2990315: cmciRelease not called in case of error
+- 3196128: enumInstances does not set NameSpace in ObjectPath in XML mode
+- 1956407: CIM-XML/HTTP connection to unix socket
+- 2967257: Use of CMPI_chars in SFCC. General CMPI specification bug
+- 2847964: sfcc's getClass() fails to report class qualifiers
+
 Changes in 2.2.1
 ================
 
@@ -17,6 +36,8 @@ Bugs:
 - 2270179: Missing includes and values in return statements
 - 2431835: XML client library not found. 
 - 2596921: v2test_ei test fails when using CIMXML interface
+- 2050256: SFCC and SFCB header files for Binary communication varies
+- 1946188: Error in sfcc decoding function causes SFCB process to crash
 
 Changes in 2.1
 ==============

@@ -1,10 +1,91 @@
+2011-03-30  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* TEST/v2test_im.c:
+	Added file
+
+2011-03-30  Michael Chase-Salerno <bratac@linux.vnet.ibm.com>
+
+	* backend/cimxml/constClass.c, backend/cimxml/grammar.c
+	[ 2847964 ] sfcc's getClass() fails to report class qualifiers
+	(patch by Klaus Kampf)
+
+2011-03-30  Narasimha Sharoff  <nsharoff@us.ibm.com>
+
+	* backend/cimxml/value.c frontend/cpp/CimData.cpp ; sfcclient.c
+        [ 2967257 ] Use of CMPI_chars in SFCC. General CMPI specification bug
+	(patch by Klaus Kampf)
+
+2011-03-29  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* backend/cimxml/client.c:
+	[ 1956407 ] CIM-XML/HTTP connection to unix socket
+	(patch by Bart Whiteley)
+
+	* backend/cimxml/grammar.c:
+	[ 3196128 ] enumInstances does not set NameSpace in ObjectPath in XML mode
+	(patch by Josef Moellers)
+
+2011-03-23  Narasimha Sharoff  <nsharoff@us.ibm.com>
+
+	* frontend/sfcc/sfcclient.c
+	[ 2990315 ] cmciRelease not called in case of error
+	(patch by Klaus Kampf)
+
+2011-03-02  Narasimha Sharoff  <nsharoff@us.ibm.com>
+
+	* TEST/v2*.c
+	[ 3195267 ] sfcc v2 tests segfault when sfcb is not running
+
+2011-03-01  Narasimha Sharoff  <nsharoff@us.ibm.com>
+
+	* cimc/cimcclient.c
+	[ 3101151 ] SfcbLocal failed to connect due to hardcoded library path
+
+2011-02-22  Narasimha Sharoff  <nsharoff@us.ibm.com>
+
+	* cimc/cimcclient.c, TEST/show.c, TEST/test.c, TEST/test_gc.c
+	[ 2793377 ] Missing includes
+	(patch to add <string.h> in cimcclient.c by Miska, miska_tx)
+
+2011-01-13  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* backend/cimxml/cimXmlParser.c:
+	[ 2348900 ] Concurrency issue when parsing responses
+
+2010-09-27  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* backend/cimxml/client.c:
+	Expandeded fix for 3043282 to cover arrays as well
+
+2010-09-07  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* cimc/cimcft.h:
+	Fixed 3059060: 'struct _CIMCArgsFT' not defined in cimc/cimcft.h
+
+2010-08-19  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* backend/cimxml/client.c:
+	Fixed 3043288: XML generated with VALUE.ARRAY for ref arrays
+
+	Fixed 3043282: XML gen for embedded instances for invokeMethod is incorrect
+
+2010-04-05  Chris Buccella  <buccella@linux.vnet.ibm.com>
+
+	* backend/cimxml/client.c:
+	Fixed 2982349: Memory leak in backend/cimxml/client.c
+	(patch by Suresh Sundriyal)
+
+	* backend/cimxml/property.c:
+	Fixed 2982352: Double free in backend/cimxml/property.c
+	(patch by Suresh Sundriyal)
+	
 2009-09-22  Chris Buccella  <buccella@linux.vnet.ibm.com>
 
 	* backend/cimxml/cimXmlParser.h:
 	Fixed 2849853: getClass reports most property types as CMPI_Instance
 	(patch by Klaus Kampf)
 
-2009-09-02  Michael Chase-Salerno <bratac@linux.vnet.ibm.com>
+2009-09-02  Michael Chase-Salerno <ckend/cimxml/constClass.cbratac@linux.vnet.ibm.com>
 	* backend/cimxml/client.c
 	Fixed 2847782: sfcc getClass crashes if cimom isn't running
 	(patch by Klaus Kämpf)
@@ -40,6 +121,11 @@
 	* Makefile.am configure.ac cimc/cimcclient.c
 	Fixed 2158091: sfcb modules belong in private dir
 
+2008-09-09  Sean Swehla <smswehla@linux.vnet.ibm.com>
+
+	* cimc/cimcft.h:
+	Fixed 2050256: SFCC and SFCB header files for Binary communication varies
+	
 2008-09-06  Sean Swehla <smswehla@linux.vnet.ibm.com>
 	* TEST/v2_testein.c
 	Fixed 2102345: missing configuration of CIM-HOST-PORT in sblim-sfcc
@@ -52,8 +138,9 @@
 	(patch by Pavol Rusnak)
 
 2008-06-16  Michael Chase-Salerno <bratac@linux.vnet.ibm.com>
-    * frontend/sfcc/sfcclient.c
-    Better handling of NULL values for slp.
+
+	* frontend/sfcc/sfcclient.c:
+	Fixed 1946188: Better handling of NULL values for slp.
 
 2008-05-16  Michael Chase-Salerno <bratac@linux.vnet.ibm.com>
 
