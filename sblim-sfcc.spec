@@ -7,7 +7,7 @@
 Summary: Small Footprint CIM Client Library
 Name: sblim-sfcc
 Version: 2.2.5
-Release: 3%{?dist}
+Release: 6%{?dist}
 Group: Applications/System
 License: EPL
 URL: http://www.sblim.org
@@ -50,15 +50,27 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcmpisfcc.so.1.0.0
 
 %files
 %{_libdir}/*.so.*
+%{_libdir}/libcimcClientXML.so
 %{_mandir}/man3/*.3.gz
 %{_docdir}/*
 
 %files devel
 %{_includedir}/CimClientLib/*
 %{_includedir}/cimc/*
-%{_libdir}/*.so 
+%{_libdir}/libcimcclient.so
+%{_libdir}/libcmpisfcc.so
 
 %changelog
+* Wed Jan 29 2014 Vitezslav Crhonek <vcrhonek@redhat.com> - 2.2.5-6
+- Move libcimcClientXML.so from -devel to main package - it's needed for proper function
+  Resolves: #1056407
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.2.5-5
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.2.5-4
+- Mass rebuild 2013-12-27
+
 * Mon Jul 22 2013 Vitezslav Crhonek <vcrhonek@redhat.com> - 2.2.5-3
 - Remove rpath from libcmpisfcc library again
 
